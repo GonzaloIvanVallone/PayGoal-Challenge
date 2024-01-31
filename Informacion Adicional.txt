@@ -1,0 +1,32 @@
+Al correr el programa se cargaran de forma automatica 4 productos para hacer mas ameno y rapido el testeo de los endpoints.
+Endpoints:
+-POST 
+	http://localhost:8080/api/save
+	{
+    		"name": "cheese",
+    		"description": "the favourite meal of rats",
+    		"price": 15.00,
+    		"quantity": 16
+	}
+	Aclaracion: Al crear un producto se le devolvera el mismo junto con el ID, anotar dicho ID para probar posteriormente el update.
+		    Esta contemplado el rechazo de la creacion en caso de que falten datos
+-DELETE 
+	http://localhost:8080/api/delete?name=shovel (@requestparam, remplazar "shovel" por la palabra deseada)
+	Aclaracion: Esta contemplada la busqueda de productos no existentes 
+
+-GET (todos los productos)
+	http://localhost:8080/api/allproducts
+
+-GET (producto singular)	
+	http://localhost:8080/api/product?id=3 (@requestparam, busqueda por id)
+ 	http://localhost:8080/api/product?name=shovel (@requestparam, busqueda por nombre de producto)
+	Aclaracion: Todos los endpoint GET devuelven el ID, anotar dicho ID para probar posteriormente el update
+-PUT 
+	http://localhost:8080/api/update
+	{
+    		"id": 2,
+    		"name": "asado",
+    		"description": "the favourite meal of rats",
+    		"price": 15.00,
+    		"quantity": 16
+	}
