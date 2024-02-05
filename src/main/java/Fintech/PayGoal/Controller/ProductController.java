@@ -17,7 +17,7 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @PostMapping("/save")
+    @PostMapping("/create")
     public ResponseEntity<?> saveProduct(@Valid @RequestBody Product product){
         try{
             return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.OK);
@@ -32,7 +32,7 @@ public class ProductController {
         try{
             return new ResponseEntity<>(productService.deleteProduct(name), HttpStatus.OK);
         }catch(ProductNotFoundException productNotFoundException){
-            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
         }catch(Exception e){
             return new ResponseEntity<>("Error while deleting the product", HttpStatus.BAD_REQUEST);
         }
@@ -42,33 +42,37 @@ public class ProductController {
         try{
             return new ResponseEntity<>(productService.updateProduct(product), HttpStatus.OK);
         }catch(ProductNotFoundException productNotFoundException){
-            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
         }catch(Exception e){
             return new ResponseEntity<>("Error while updating the product", HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/product")
-    public ResponseEntity<?> getProduct(@RequestParam(value = "id", required = false) Long id, @RequestParam(value = "name", required = false) String name){
+    @GetMapping("/product/id")
+    public ResponseEntity<?> getProductById(@RequestParam("id") Long id){
         try{
-            if(id != null) {
-                return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
-            }else if(name != null){
-                return new ResponseEntity<>(productService.getProductByName(name), HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>("Provide either id or name", HttpStatus.BAD_REQUEST);
-            }
+            return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
         }catch(ProductNotFoundException productNotFoundException){
-            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
         }catch (Exception e){
             return new ResponseEntity<>("Error while searching for the product", HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/allproducts")
+    @GetMapping("/product/name")
+    public ResponseEntity<?> getProductByName(@RequestParam("name") String name){
+        try{
+            return new ResponseEntity<>(productService.getProductByName(name), HttpStatus.OK);
+        }catch(ProductNotFoundException productNotFoundException){
+            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error while searching for the product", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/product/all")
     public ResponseEntity<?> getAllProducts(){
         try{
             return new ResponseEntity<>(productService.getAllProductsSorted(), HttpStatus.OK);
         }catch(ProductNotFoundException productNotFoundException){
-            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
         }catch(Exception e){
             return new ResponseEntity<>("Error while searching for the product", HttpStatus.BAD_REQUEST);
         }
