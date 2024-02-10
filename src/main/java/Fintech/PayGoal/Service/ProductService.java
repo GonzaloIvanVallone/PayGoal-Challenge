@@ -27,7 +27,7 @@ public class ProductService {
             throw new RuntimeException("Product couldn't be saved", e);
         }
     }
-    public Optional<Product> updateProduct(Product product){
+    public Product updateProduct(Product product){
         try{
             Optional<Product> p = productRepository.findById(product.getId());
             if(p.isPresent()){
@@ -37,7 +37,7 @@ public class ProductService {
                 newProduct.setPrice(product.getPrice());
                 newProduct.setQuantity(product.getQuantity());
                 productRepository.save(newProduct);
-                return Optional.of(product);
+                return newProduct;
             }
             throw new ProductNotFoundException("Product not found");
         }catch(ProductNotFoundException productNotFoundException){
@@ -46,14 +46,14 @@ public class ProductService {
             throw new RuntimeException("Product couldn't be updated", e);
         }
     }
-    public Optional<Product> deleteProduct(String name){
+    public Product deleteProduct(String name){
         try{
             Optional<Product> p = productRepository.findByName(name);
             if(p.isEmpty()){
                 throw new ProductNotFoundException("Product not found");
             }else{
                 productRepository.delete(p.get());
-                return p;
+                return p.get();
             }
         }catch(ProductNotFoundException productNotFoundException) {
             throw productNotFoundException;
@@ -61,26 +61,26 @@ public class ProductService {
             throw new RuntimeException("Product couldn't be deleted", e);
         }
     }
-    public Optional<Product> getProductById(Long id){
+    public Product getProductById(Long id){
         try{
             Optional<Product> p = productRepository.findById(id);
             if(p.isEmpty()){
                 throw new ProductNotFoundException("Product not found");
             }
-            return p;
+            return p.get();
         }catch(ProductNotFoundException productNotFoundException) {
             throw productNotFoundException;
         }catch(Exception e){
             throw new RuntimeException("Error while retrieving product", e);
         }
     }
-    public Optional<Product> getProductByName(String name){
+    public Product getProductByName(String name){
         try{
             Optional<Product> p = productRepository.findByName(name);
             if(p.isEmpty()){
                 throw new ProductNotFoundException("Product not found");
             }
-            return p;
+            return p.get();
         }catch(ProductNotFoundException productNotFoundException) {
             throw productNotFoundException;
         }catch(Exception e){
